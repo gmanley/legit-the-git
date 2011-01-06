@@ -1,0 +1,12 @@
+#!/usr/bin/env ruby
+DEVELOPMENT_DIR = "/Users/tukaiz/projects/accurev_git_hooks"
+
+begin
+  require 'rubygems'
+  require 'accuhook'
+rescue LoadError => e
+  require File.join(DEVELOPMENT_DIR, "lib", "accuhook")
+end
+
+repository = Grit::Repo.new(File.join(File.dirname(__FILE__), "..", ".."))
+AccuHook::Accurev::Commit.new(repository)
