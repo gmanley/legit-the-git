@@ -1,0 +1,41 @@
+#!/usr/bin/env ruby
+require File.dirname(__FILE__) + "/vendor/grit/lib/grit"
+require File.dirname(__FILE__) + "/vendor/highline/lib/highline/import"
+
+# Check if user is logged into accurev... if not request login.
+
+accurev_auth if Dir["#{ENV['HOME']}/.accurev/session_*"].empty?
+
+
+@repo = Grit::Repo.new(File.dirname(__FILE__) + "/../../")
+@last_commit = @repo.commits.first
+@last_commit_message = @last_commit.message
+
+puts @last_commit_message
+@last_commit.show.each do |diff|
+  case
+  when diff.new_file # Accurev add, then keep
+    puts "New file detected"
+    if File.directory?(diff.a_path) # Recursively add directory (`accurev add -x -R {Dir}`)
+      puts "Directory detected"
+      #puts "Running \`accurev add -x -R \"#{diff.a_path}\"\`"
+      %x( accurev add -x -R \"#{diff.a_path}\" )
+    else  # Add single file (`accurev add {File}`)
+      puts "Running \`accurev add \"#{diff.a_path}\"\`"
+      %x( accurev add \"#{diff.a_path}\" )
+    end
+    puts "Running \`accurev keep -c \"#{@last_commit_message}\" \"#{diff.a_path}\"\`"
+    %x( accurev keep -c \"#{@last_commit_message} #{diff.a_path}\" )
+  when diff.deleted_file # accurev defunct
+    puts "Deleted file detected"
+    puts "Running \`accurev defunct -c \"#{@last_commit_message}\" \"#{diff.a_path}\"\`"
+    %x( accurev defunct -c \"#{@last_commit_message}\" \"#{diff.a_path}\" )
+  when diff.renamed_file # accurev defunct a_path, then add b_path (then keep)
+    puts "Renamed file detected"
+    puts diff.a_path
+
+  else # Accurev regular keep
+    puts "Modified file detected"
+    puts diff.a_path
+  end
+end
