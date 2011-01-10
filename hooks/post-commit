@@ -1,8 +1,4 @@
 #!/usr/bin/env ruby
-
-# Copyright (c) 2011 Grayson Manley
-# Licensed under the MIT license: http://www.opensource.org/licenses/mit-license
-
 DEVELOPMENT_DIR = "/Users/tukaiz/projects/accurev_git_hooks"
 
 begin

@@ -1,3 +1,6 @@
+# Copyright (c) 2011 Grayson Manley
+# Licensed under the MIT license: http://www.opensource.org/licenses/mit-license
+
 require 'optparse'
 require 'ostruct'
 require 'fileutils'
@@ -16,10 +19,6 @@ module AccuHook
         puts 'Version 0.0.1'
         exit 0
       end
-
-    rescue Grit::InvalidGitRepositoryError
-      puts "Invalid Git repository:\n#{@options.path}"
-      exit 1
     end
 
     private
@@ -42,25 +41,17 @@ module AccuHook
   end
 
   class Installation
-    def install(path_or_repo)
-      repo = parse_path path_or_repo
 
-      repo_hooks_dir = File.join(repo.path,'hooks')
-      FileUtils.mkdir hooks_dir unless File.exist? hooks_dir
-
-      FileUtils.install(File.join(File.dirname(__FILE__), "hooks", "post-commit"), repo_hooks_dir, :mode => 0600)
+    def initialize(repo)
+      install(repo)
     end
 
-    def installed? (path_or_repo)
-      File.file?(hooks_file(path_or_repo))
-    end
+    def install(repo)
+      repo_hooks_dir = File.join(repo, '.git', 'hooks')
+      FileUtils.mkdir repo_hooks_dir unless File.exist? repo_hooks_dir
 
-    private
-    def prompt(message)
-      while true
-        puts message+' [yn]'
-        return 'yY'.include?($1) ? true : false if $stdin.gets.strip =~ /([yYnN])/
-      end
+      FileUtils.install(File.join(File.dirname(__FILE__), "hooks", "post-commit"), repo_hooks_dir, :mode => 0755)
+      FileUtils.install(File.join(File.dirname(__FILE__), "hooks", "pre-commit"), repo_hooks_dir, :mode => 0755)
     end
   end
 end

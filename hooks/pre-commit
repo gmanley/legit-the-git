@@ -1,0 +1,7 @@
+#!/usr/bin/env ruby
+
+def logged_in?
+  system("accurev secinfo > /dev/null 2>&1")
+end
+
+raise "Please Login! (`accurev login`)" unless logged_in?

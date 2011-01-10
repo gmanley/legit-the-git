@@ -1,12 +1,14 @@
-module Accuhook
+# Copyright (c) 2011 Grayson Manley
+# Licensed under the MIT license: http://www.opensource.org/licenses/mit-license
+
+module AccuHook
   module Accurev
     class Commit
-      require "command"
+      require File.dirname(__FILE__) + "/command"
 
       def initialize(repository)
-        @command = Command.new
+        @command = AccuHook::Accurev::Command.new
         last_git_commit = repository.commits.first
-        @command.login if Dir["#{ENV['HOME']}/.accurev/session_*"].empty?
         commit(last_git_commit)
       end
 
@@ -14,7 +16,7 @@ module Accuhook
         last_git_commit.show.each do |diff|
           case
           when diff.new_file # Accurev add, then keep
-            @commmand.add(diff.a_path)
+            @command.add(diff.a_path)
             @command.keep(diff.a_path, last_git_commit.message)
           when diff.deleted_file # accurev defunct
             @command.defunct(diff.a_path, last_git_commit.message)

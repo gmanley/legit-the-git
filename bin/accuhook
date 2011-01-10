@@ -1,6 +1,14 @@
 #!/usr/bin/env ruby
 
-require 'rubygems'
-require 'accuhook'
+# Copyright (c) 2011 Grayson Manley
+# Licensed under the MIT license: http://www.opensource.org/licenses/mit-license
+
+# DEVELOPMENT_DIR = "/Users/tukaiz/projects/accurev_git_hooks"
+begin
+  require 'rubygems'
+  require 'accuhook'
+rescue LoadError => e
+  require File.join(DEVELOPMENT_DIR, "lib", "accuhook")
+end
 
 AccuHook::CommandLine.execute(ARGV)
