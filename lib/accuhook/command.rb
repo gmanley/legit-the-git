@@ -8,18 +8,18 @@ module AccuHook
 
       def add(file_path)
         if File.directory?(file_path) # Recursively add directory (`accurev add -x -R {Dir}`)
-          execute("add -x -R #{file_path}")
+          execute("add -x -R \"#{file_path}\"")
         else  # Add single file (`accurev add {File}`)
-          execute("add #{file_path}")
+          execute("add \"#{file_path}\"")
         end
       end
 
       def keep(file_path, message)
-        execute("keep -c #{message} #{file_path}")
+        execute("keep -c \"#{message}\" \"#{file_path}\"")
       end
 
       def defunct(file_path, message)
-        execute("defunct -c #{@last_commit_message} #{diff.a_path}")
+        execute("defunct -c \"#{@last_commit_message}\" \"#{diff.a_path}\"")
       end
 
       private
@@ -27,6 +27,7 @@ module AccuHook
         args = Shellwords.split(command)
         escaped_args = args.map {|arg| Shellwords.escape(arg)}
         sub_command = Shellwords.join(escaped_args)
+        #puts "Running accurev #{sub_command}"
         system("accurev #{sub_command}")
       end
     end
