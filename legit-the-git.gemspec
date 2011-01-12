@@ -22,7 +22,7 @@ Gem::Specification.new do |s|
     "lib/accuhook/command_line.rb",
     "lib/accuhook/commit.rb",
     "lib/accuhook/hooks/post-commit",
-    "lib/accuhook/hooks/pre-receive"
+    "lib/accuhook/hooks/post-receive"
   ]
   s.add_runtime_dependency("grit", ["~> 2.3.0"])
 end

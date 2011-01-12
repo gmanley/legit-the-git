@@ -10,7 +10,7 @@ new_head_ref = args[1]
 require 'rubygems'
 require 'accuhook'
 
-repository = Grit::Repo.new(File.join(File.dirname(__FILE__), "..", ".."))
+repository = Grit::Repo.new(File.join(File.dirname(__FILE__), "..", "..", ".."))
 
 @commits = []
 repository.commit_deltas_from(repository, old_head_ref, new_head_ref).each do |commit|
