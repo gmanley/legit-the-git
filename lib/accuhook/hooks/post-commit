@@ -3,14 +3,8 @@
 # Copyright (c) 2011 Grayson Manley
 # Licensed under the MIT license: http://www.opensource.org/licenses/mit-license
 
-DEVELOPMENT_DIR = "/Users/tukaiz/projects/accurev_git_hooks"
-
-begin
-  require 'rubygems'
-  require 'accuhook'
-rescue LoadError => e
-  require File.join(DEVELOPMENT_DIR, "lib", "accuhook")
+def logged_in?
+  system("accurev secinfo > /dev/null 2>&1")
 end
 
-repository = Grit::Repo.new(File.join(File.dirname(__FILE__), "..", ".."))
-AccuHook::Accurev::Commit.new(repository)
+puts "Remember to login before you push to accurev! (`accurev login`)" unless logged_in?

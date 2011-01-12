@@ -3,7 +3,7 @@
 
 Gem::Specification.new do |s|
   s.name                = "Legit-the-Git"
-  s.version             = "0.0.2"
+  s.version             = "0.0.3"
 
   s.summary             = "Git accurev bridge"
   s.description         = "Git hooks to help keep accurev and git in sync"
@@ -22,7 +22,7 @@ Gem::Specification.new do |s|
     "lib/accuhook/command_line.rb",
     "lib/accuhook/commit.rb",
     "lib/accuhook/hooks/post-commit",
-    "lib/accuhook/hooks/pre-commit"
+    "lib/accuhook/hooks/pre-receive"
   ]
   s.add_runtime_dependency("grit", ["~> 2.3.0"])
 end

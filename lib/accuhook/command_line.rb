@@ -1,6 +1,8 @@
 # Copyright (c) 2011 Grayson Manley
 # Licensed under the MIT license: http://www.opensource.org/licenses/mit-license
 
+require 'rubygems'
+require 'accuhook'
 require 'optparse'
 require 'ostruct'
 require 'fileutils'
@@ -16,7 +18,7 @@ module AccuHook
         ret_val = AccuHook::Installation.new(options.path)
         exit 0
       when :version
-        puts 'Version 0.0.1'
+        puts 'Version 0.0.3'
         exit 0
       end
     end
@@ -46,12 +48,21 @@ module AccuHook
       install(repo)
     end
 
-    def install(repo)
-      repo_hooks_dir = File.join(repo, '.git', 'hooks')
-      FileUtils.mkdir repo_hooks_dir unless File.exist? repo_hooks_dir
+    def install(repo_path)
+      repository = Grit::Repo.new(repo_path)
 
-      FileUtils.install(File.join(File.dirname(__FILE__), "hooks", "post-commit"), repo_hooks_dir, :mode => 0755)
-      FileUtils.install(File.join(File.dirname(__FILE__), "hooks", "pre-commit"), repo_hooks_dir, :mode => 0755)
+      repo_hooks = File.join(repo_path, '.git', 'hooks')
+      accurev_repo = File.join(repo_path, '.git', 'accurev.git')
+      accurev_hooks = File.join(repo_path, '.git', 'accurev.git', 'hooks')
+
+      repository.fork_bare(accurev_repo, :shared => false, :mirror => true)
+      repository.remote_add("accurev", accurev_repo)
+
+      FileUtils.mkdir accurev_hooks unless File.exist? accurev_hooks
+      FileUtils.mkdir repo_hooks unless File.exist? repo_hooks
+
+      FileUtils.install(File.join(File.dirname(__FILE__), "hooks", "post-commit"), repo_hooks, :mode => 0755)
+      FileUtils.install(File.join(File.dirname(__FILE__), "hooks", "post-receive"), accurev_hooks, :mode => 0755)
     end
   end
 end
