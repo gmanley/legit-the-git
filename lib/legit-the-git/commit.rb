@@ -1,14 +1,13 @@
 # Copyright (c) 2011 Grayson Manley
 # Licensed under the MIT license: http://www.opensource.org/licenses/mit-license
 
-module AccuHook
+module LegitGit
   module Accurev
     class Commit
       require File.dirname(__FILE__) + "/command"
 
       def initialize(repository, commit_object)
-        @command = AccuHook::Accurev::Command.new
-        puts commit_object.inspect
+        @command = LegitGit::Accurev::Command.new
         commit!(commit_object, repository)
       end
 
@@ -17,9 +16,11 @@ module AccuHook
           commit.show.each do |diff|
             case
             when diff.new_file # Accurev add, then keep
+              puts "New file detected"
               @command.add("#{repository.working_dir}/#{diff.a_path}")
               @command.keep("#{repository.working_dir}/#{diff.a_path}", commit.message)
             when diff.deleted_file # accurev defunct
+              puts "Deleted file detected"
               @command.defunct("#{repository.working_dir}/#{diff.a_path}", commit.message)
             when diff.renamed_file # accurev defunct a_path, then add b_path (then keep)
               puts "Renamed file detected"

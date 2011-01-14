@@ -8,7 +8,7 @@ old_head_ref = args[0]
 new_head_ref = args[1]
 
 require 'rubygems'
-require 'accuhook'
+require 'legit-the-git'
 
 repository = Grit::Repo.new(File.join(File.dirname(__FILE__), "..", "..", ".."))
 
@@ -17,4 +17,4 @@ repository.commit_deltas_from(repository, old_head_ref, new_head_ref).each do |c
   @commits << commit
 end
 
-AccuHook::Accurev::Commit.new(repository, @commits.reverse)
+LegitGit::Accurev::Commit.new(repository, @commits.reverse)

@@ -2,12 +2,12 @@
 # Licensed under the MIT license: http://www.opensource.org/licenses/mit-license
 
 require 'rubygems'
-require 'accuhook'
+require 'legit-the-git'
 require 'optparse'
 require 'ostruct'
 require 'fileutils'
 
-module AccuHook
+module LegitGit
   class CommandLine
     # Parse command line options and execute
     def self.execute(args)
@@ -15,10 +15,10 @@ module AccuHook
 
       case options.command
       when :install
-        ret_val = AccuHook::Installation.new(options.path)
+        ret_val = LegitGit::Installation.new(options.path)
         exit 0
       when :version
-        puts 'Version 0.0.3'
+        puts 'Version 0.0.4'
         exit 0
       end
     end
@@ -62,7 +62,7 @@ module AccuHook
       FileUtils.mkdir repo_hooks unless File.exist? repo_hooks
 
       FileUtils.install(File.join(File.dirname(__FILE__), "hooks", "post-commit"), repo_hooks, :mode => 0755)
-      FileUtils.install(File.join(File.dirname(__FILE__), "hooks", "post-receive"), accurev_hooks, :mode => 0755)
+      FileUtils.install(File.join(File.dirname(__FILE__), "hooks", "pre-receive"), accurev_hooks, :mode => 0755)
     end
   end
 end

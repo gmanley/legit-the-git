@@ -1,7 +1,7 @@
 # Copyright (c) 2011 Grayson Manley
 # Licensed under the MIT license: http://www.opensource.org/licenses/mit-license
 
-module AccuHook
+module LegitGit
   module Accurev
     class Command
       require "shellwords"
