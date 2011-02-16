@@ -3,42 +3,38 @@
 
 require 'rubygems'
 require 'legit-the-git'
-require 'optparse'
-require 'ostruct'
 require 'fileutils'
 
 module LegitGit
   class CommandLine
+
     # Parse command line options and execute
     def self.execute(args)
-      options = parse_options(args)
 
-      case options.command
-      when :install
-        ret_val = LegitGit::Installation.new(options.path)
+      help = <<-EOS
+Usage #{File.basename $0} [--version] [--help] <command>
+
+Commands:
+  install      Install the Accurev Git hook into the current directory
+
+Workflow:
+  Once installed commit your changes like usual. When you would like to push
+  those changes to accurev, just run `git push accurev`. This will sync new
+  commits from the current branch to the accurev server. Just make sure you
+  are logged into accurev!
+
+EOS
+
+      case args
+      when "install"
+        ret_val = LegitGit::Installation.new(Dir.pwd)
         exit 0
-      when :version
-        puts 'Version 0.0.4'
+      when "--version"
+        puts "0.0.4"
         exit 0
+      else
+        puts help
       end
-    end
-
-    private
-    def self.parse_options(args)
-      options = OpenStruct.new
-      options.command = :help
-      options.path = Dir.pwd
-
-      opts = OptionParser.new do |opts|
-        opts.banner = "Usage #{File.basename $0} [options]"
-        opts.on_head("-i","--install", "Install Accurev Git hook in current dir") { options.command = :install }
-        opts.on("-p","--path=[path]", "Install Accurev Git hook to specified path") { |path| options.path = path }
-        opts.on_tail("--version", "Print current version and exit") {options.command = :version }
-        opts.on_tail("-h","--help", "Print help message")
-      end
-      opts.parse!(args)
-      (puts opts and exit 0) if options.command == :help
-      options
     end
   end
 
