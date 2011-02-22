@@ -6,4 +6,4 @@
 require 'rubygems'
 require 'legit-the-git'
 
-LegitGit::CommandLine.execute(ARGV[1])
+LegitGit::CommandLine.execute(ARGV[0])

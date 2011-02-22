@@ -16,6 +16,7 @@ Usage #{File.basename $0} [--version] [--help] <command>
 
 Commands:
   install      Install the Accurev Git hook into the current directory
+  uninstall    Remove legit-the-git from the current repo
 
 Workflow:
   Once installed commit your changes like usual. When you would like to push
@@ -61,19 +62,19 @@ EOS
       @repository.fork_bare(@accurev_repo, :shared => false, :mirror => true)
       @repository.remote_add("accurev", @accurev_repo)
 
-      FileUtils.mkdir_p(@accurev_hooks, @repo_hooks)
+      FileUtils.mkdir_p([@accurev_hooks, @repo_hooks])
 
       FileUtils.install(File.join(File.dirname(__FILE__), "hooks", "post-commit"), @repo_hooks, :mode => 0755)
       FileUtils.install(File.join(File.dirname(__FILE__), "hooks", "pre-receive"), @accurev_hooks, :mode => 0755)
     end
 
-    def uninstall(repo_path)
-      unless repository.remotes.select {|r| r.name =~ /accurev/}.empty?
-        git = Grit::Git.new(Dir.pwd)
-        git.native("remote rm accurev")
+    def uninstall
+      unless @repository.remotes.select {|r| r.name =~ /accurev/}.empty?
+        git = Grit::Git.new(File.expand_path(File.join(Dir.pwd, '.git/')))
+        git.native(:remote, {}, 'rm', 'accurev')
       end
 
-      FileUtils.rm_rf(@accurev_repo, File.join(@repo_hooks, "hooks", "post-commit"))
+      FileUtils.rm_rf([@accurev_repo, File.join(@repo_hooks, "hooks", "post-commit")])
     end
   end
 end
