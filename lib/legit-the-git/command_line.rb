@@ -58,10 +58,8 @@ EOS
     end
 
     def install
-      @repository do |repo|
-        repo.fork_bare(@accurev_repo, :shared => false, :mirror => true)
-        repo.remote_add("accurev", @accurev_repo)
-      end
+      @repository.fork_bare(@accurev_repo, :shared => false, :mirror => true)
+      @repository.remote_add("accurev", @accurev_repo)
 
       FileUtils.mkdir_p(@accurev_hooks, @repo_hooks)
 
