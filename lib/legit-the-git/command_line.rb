@@ -27,7 +27,15 @@ EOS
 
       case args
       when "install"
-        ret_val = LegitGit::Installation.new(Dir.pwd)
+        installation = LegitGit::Installation.new(Dir.pwd)
+        installation.install
+        puts 'Successfully installed!'
+        puts "Run #{File.basename $0} --help for usage."
+        exit 0
+      when "uninstall"
+        installation = LegitGit::Installation.new(Dir.pwd)
+        installation.uninstall
+        puts 'Successfully uninstalled!'
         exit 0
       when "--version"
         puts "0.0.4"
@@ -39,26 +47,35 @@ EOS
   end
 
   class Installation
+    # Refactor!
 
-    def initialize(repo)
-      install(repo)
+    def initialize(repo_path)
+      @repository = Grit::Repo.new(repo_path)
+      @accurev_repo = File.join(repo_path, '.git', 'accurev.git')
+
+      @accurev_hooks = File.join(repo_path, '.git', 'accurev.git', 'hooks')
+      @repo_hooks = File.join(repo_path, '.git', 'accurev.git', 'hooks')
     end
 
-    def install(repo_path)
-      repository = Grit::Repo.new(repo_path)
+    def install
+      @repository do |repo|
+        repo.fork_bare(@accurev_repo, :shared => false, :mirror => true)
+        repo.remote_add("accurev", @accurev_repo)
+      end
 
-      repo_hooks = File.join(repo_path, '.git', 'hooks')
-      accurev_repo = File.join(repo_path, '.git', 'accurev.git')
-      accurev_hooks = File.join(repo_path, '.git', 'accurev.git', 'hooks')
+      FileUtils.mkdir_p(@accurev_hooks, @repo_hooks)
 
-      repository.fork_bare(accurev_repo, :shared => false, :mirror => true)
-      repository.remote_add("accurev", accurev_repo)
+      FileUtils.install(File.join(File.dirname(__FILE__), "hooks", "post-commit"), @repo_hooks, :mode => 0755)
+      FileUtils.install(File.join(File.dirname(__FILE__), "hooks", "pre-receive"), @accurev_hooks, :mode => 0755)
+    end
 
-      FileUtils.mkdir accurev_hooks unless File.exist? accurev_hooks
-      FileUtils.mkdir repo_hooks unless File.exist? repo_hooks
+    def uninstall(repo_path)
+      unless repository.remotes.select {|r| r.name =~ /accurev/}.empty?
+        git = Grit::Git.new(Dir.pwd)
+        git.native("remote rm accurev")
+      end
 
-      FileUtils.install(File.join(File.dirname(__FILE__), "hooks", "post-commit"), repo_hooks, :mode => 0755)
-      FileUtils.install(File.join(File.dirname(__FILE__), "hooks", "pre-receive"), accurev_hooks, :mode => 0755)
+      FileUtils.rm_rf(@accurev_repo, File.join(@repo_hooks, "hooks", "post-commit"))
     end
   end
 end
