@@ -7,12 +7,13 @@ module LegitGit
       require File.dirname(__FILE__) + "/command"
 
       def initialize(repository, commit_object)
-        @command = LegitGit::Accurev::Command.new
+        @command = Command.new
         commit!(commit_object, repository)
       end
 
       def commit!(commit_object, repository)
         commit_object.each do |commit|
+          $stdout.puts "\e[\033[0;36mSyncing Commit \e[\033[0;32m#{commit.id_abbrev}\e[0m\n\e[\033[0;33m#{commit.message}\e[0m"
           commit.show.each do |diff|
             case
             when diff.new_file # Accurev add, then keep
