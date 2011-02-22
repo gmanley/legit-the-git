@@ -39,7 +39,7 @@ EOS
         puts 'Successfully uninstalled!'
         exit 0
       when "--version"
-        puts "0.0.4"
+        puts "0.0.5"
         exit 0
       else
         puts help

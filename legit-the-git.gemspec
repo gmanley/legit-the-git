@@ -3,7 +3,7 @@
 
 Gem::Specification.new do |s|
   s.name                = "legit-the-git"
-  s.version             = "0.0.4"
+  s.version             = "0.0.5"
 
   s.summary             = "Git accurev bridge"
   s.description         = "Git hooks to help keep accurev and git in sync"
