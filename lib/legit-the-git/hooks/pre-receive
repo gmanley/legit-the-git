@@ -15,4 +15,4 @@ repository.commit_deltas_from(repository, old_head_ref, new_head_ref).each do |c
   @commits << commit
 end
 
-LegitGit::Accurev::Commit.new(repository, @commits.reverse)
+LegitGit::Commit.new(repository, @commits.reverse)

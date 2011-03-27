@@ -24,13 +24,13 @@ EOS
 
       case args
       when "install"
-        installation = LegitGit::Installation.new(Dir.pwd)
+        installation = Installation.new(Dir.pwd)
         installation.install
         puts 'Successfully installed!'
         puts "Run #{File.basename $0} --help for usage."
         exit 0
       when "uninstall"
-        installation = LegitGit::Installation.new(Dir.pwd)
+        installation = Installation.new(Dir.pwd)
         installation.uninstall
         puts 'Successfully uninstalled!'
         exit 0
