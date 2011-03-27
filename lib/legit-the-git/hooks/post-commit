@@ -1,8 +1,5 @@
 #!/usr/bin/env ruby
 
-# Copyright (c) 2011 Grayson Manley
-# Licensed under the MIT license: http://www.opensource.org/licenses/mit-license
-
 def logged_in?
   system("accurev secinfo > /dev/null 2>&1")
 end

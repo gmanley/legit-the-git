@@ -1,6 +1,3 @@
-# Copyright (c) 2011 Grayson Manley
-# Licensed under the MIT license: http://www.opensource.org/licenses/mit-license
-
 Gem::Specification.new do |s|
   s.name                = "legit-the-git"
   s.version             = "0.0.5"

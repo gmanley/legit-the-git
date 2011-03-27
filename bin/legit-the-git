@@ -1,8 +1,5 @@
 #!/usr/bin/env ruby
 
-# Copyright (c) 2011 Grayson Manley
-# Licensed under the MIT license: http://www.opensource.org/licenses/mit-license
-
 lib = File.expand_path(File.dirname(__FILE__) + '/../lib')
 $LOAD_PATH.unshift dir unless $LOAD_PATH.include?(dir)
 
