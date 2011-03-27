@@ -1,4 +1,3 @@
-begin; require 'rubygems'; rescue LoadError; end
 require 'rake'
 require 'rake/gempackagetask'
 

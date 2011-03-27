@@ -1,10 +1,11 @@
 # Copyright (c) 2011 Grayson Manley
 # Licensed under the MIT license: http://www.opensource.org/licenses/mit-license
 
+require "shellwords"
+
 module LegitGit
   module Accurev
     class Command
-      require "shellwords"
 
       def add(file_path)
         if File.directory?(file_path) # Recursively add directory (`accurev add -x -R {Dir}`)

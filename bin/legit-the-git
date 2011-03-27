@@ -3,7 +3,10 @@
 # Copyright (c) 2011 Grayson Manley
 # Licensed under the MIT license: http://www.opensource.org/licenses/mit-license
 
-require 'rubygems'
+lib = File.expand_path(File.dirname(__FILE__) + '/../lib')
+$LOAD_PATH.unshift dir unless $LOAD_PATH.include?(dir)
+
 require 'legit-the-git'
+require 'legit-the-git/command_line'
 
 LegitGit::CommandLine.execute(ARGV[0])

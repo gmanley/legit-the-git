@@ -7,7 +7,7 @@ args = input.split(" ")
 old_head_ref = args[0]
 new_head_ref = args[1]
 
-require 'rubygems'
+begin; require 'rubygems'; rescue LoadError; end # Needed? Since git will be calling this file I dunno what the ENV is like.
 require 'legit-the-git'
 
 repository = Grit::Repo.new(File.join(File.dirname(__FILE__), "..", "..", ".."))

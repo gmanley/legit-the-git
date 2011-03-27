@@ -1,10 +1,12 @@
 # Copyright (c) 2011 Grayson Manley
 # Licensed under the MIT license: http://www.opensource.org/licenses/mit-license
 
+require 'grit'
+require 'legit-the-git/command'
+
 module LegitGit
   module Accurev
     class Commit
-      require File.dirname(__FILE__) + "/command"
 
       def initialize(repository, commit_object)
         @command = Command.new
