@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 lib = File.expand_path(File.dirname(__FILE__) + '/../lib')
-$LOAD_PATH.unshift dir unless $LOAD_PATH.include?(dir)
+$LOAD_PATH.unshift lib unless $LOAD_PATH.include?(lib)
 
 require 'legit-the-git'
 require 'legit-the-git/command_line'

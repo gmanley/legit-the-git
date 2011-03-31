@@ -72,6 +72,7 @@ EOS
       end
 
       FileUtils.rm_rf([@accurev_repo, File.join(@repo_hooks, "hooks", "post-commit")])
+      FileUtils.rm_rf([@accurev_repo, File.join(@repo_hooks, "hooks", "pre-receive")])
     end
   end
 end
