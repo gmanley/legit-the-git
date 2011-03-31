@@ -1,5 +1,6 @@
 require 'fileutils'
 require 'grit'
+require 'legit-the-git/version'
 
 module LegitGit
   class CommandLine
@@ -35,7 +36,7 @@ EOS
         puts 'Successfully uninstalled!'
         exit 0
       when "--version"
-        puts "0.0.5"
+        puts LegitGit::VERSION
         exit 0
       else
         puts help
